@@ -1,0 +1,27 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RestingState/e-commerce.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RestingState/e-commerce/issues"
+  },
+  "homepage": "https://github.com/RestingState/e-commerce#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.1.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

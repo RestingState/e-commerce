@@ -19,3 +19,6 @@ In this mode you can change the code and the server would refresh automatically.
 #### 2) Start mode
 You can start the server in this mode using a command: **npm run start**  
 This command just starts a server without any developments tools.  
+## Additional resources:
+Swagger:  
+**https://app.swaggerhub.com/apis/RestingState/e-commerce/1.0.0**

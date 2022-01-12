@@ -96,6 +96,17 @@ class CustomerService {
     const customer = await CustomerModel.findById(id, returnFields)
     return customer
   }
+
+
+async postOrderReceiver(name, surname, phone){
+  const customerName = await customerModel.findOne({name: data.name});
+  const customerSurname = await customerModel.findOne({surname: data.surname});
+ // const customerMiddlename = await customerModel.findOne({middlename: data.middlename});
+  const customerPhone = await customerModel.findOne({phone: data.phone});
+  if(!customerName && !customerSurname && !customerMiddlename && !customerPhone){
+    throw ApiError.BadRequest('incorrect data')
+  }
+}
 }
 
 module.exports = new CustomerService();

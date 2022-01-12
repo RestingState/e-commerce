@@ -81,6 +81,18 @@ class CustomerController {
       next(e);
     }
   }
+  async postOrderReceiver(req, res, next){
+    try {
+      const name = req.user.name;
+      const surname = req.user.surname;
+      //const middlename = req.user.middlename;
+      const phone = req.user.phone;
+      const customer = await customerService.postOrderReceiver(name,surname,phone)
+      return res.status(201).json(customer);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new CustomerController();

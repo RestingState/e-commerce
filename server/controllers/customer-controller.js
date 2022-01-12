@@ -1,6 +1,7 @@
 const customerService = require('../service/customer-service')
 const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
+const res = require('express/lib/response');
 
 class CustomerController {
   async registration(req, res, next) {
@@ -81,14 +82,29 @@ class CustomerController {
       next(e);
     }
   }
-  async postOrderReceiver(req, res, next){
+  async createOrderReceiver(req, res, next){
     try {
-      const name = req.user.name;
-      const surname = req.user.surname;
-      //const middlename = req.user.middlename;
-      const phone = req.user.phone;
-      const customer = await customerService.postOrderReceiver(name,surname,phone)
-      return res.status(201).json(customer);
+      const data = req.body;
+      const customerData = await customerService.createOrderReceiver(data);
+      return res.status(201).json(customerData);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async updateOrderReceiver(req, res, next){
+    try {
+      const data = req.body;
+      const customerData = await customerService.updateOrderReceiver(data);
+      return res.status(200).json(customerData);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async deleteOrderReceiver(req, res, next){
+    try {
+      const id = req.user.id;
+      const deleteOrderReceiver = await customerService.deleteOrderReceiver(id)
+      return res.status(200).json(deleteOrderReceiver)
     } catch (e) {
       next(e);
     }

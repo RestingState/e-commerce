@@ -16,6 +16,8 @@ router.get('/activate/:link', customerController.activate);
 router.get('/refresh', customerController.refresh);
 router.delete('', authMiddleware, customerController.deleteCustomer)
 router.get('/personalInfo', authMiddleware, customerController.getPersonalInfo)
-router.post('/orderReceiver', authMiddleware, customerController.postOrderReceiver)
+router.post('/createorderReceiver',authMiddleware, customerController.createOrderReceiver)
+router.patch('/updateOrderReceiver',authMiddleware, customerController.updateOrderReceiver)
+router.delete('/deleteOrderReceiver',authMiddleware, customerController.deleteOrderReceiver)
 
 module.exports = router;

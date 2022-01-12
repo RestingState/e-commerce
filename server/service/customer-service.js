@@ -1,9 +1,11 @@
 const CustomerModel = require('../models/customer-model');
+const OrderReceiverModel = require('../models/orderReceiver-model');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const mailService = require('./mail-service');
 const tokenService = require('./token-service');
 const CustomerDto = require('../dtos/customer-dto');
+const OrderReceiverDto = require('../dtos/orderReceiver-dto');
 const ApiError = require('../exceptions/api-error');
 
 class CustomerService {
@@ -98,14 +100,25 @@ class CustomerService {
   }
 
 
-async postOrderReceiver(name, surname, phone){
-  const customerName = await customerModel.findOne({name: data.name});
-  const customerSurname = await customerModel.findOne({surname: data.surname});
- // const customerMiddlename = await customerModel.findOne({middlename: data.middlename});
-  const customerPhone = await customerModel.findOne({phone: data.phone});
-  if(!customerName && !customerSurname && !customerMiddlename && !customerPhone){
-    throw ApiError.BadRequest('incorrect data')
-  }
+async createOrderReceiver(data){
+  let candidate = await OrderReceiverModel.findOne({ phone: data.phone });
+    if (candidate) {
+      throw ApiError.AlreadyExist('customer with this phone already exists');
+    }
+    const orderReceiver = await OrderReceiverModel.create(data);
+    const orderReceiverDto = new OrderReceiverDto(orderReceiver);
+    return{...orderReceiverDto};
+}
+async updateOrderReceiver(data){
+const customer = await OrderReceiverModel.findOneAndUpdate(
+  {id:data.id},
+  {name:data.name,
+  phone:data.phone,
+  surname:data.surname})
+  return{customer};
+}
+async deleteOrderReceiver(id){
+  const customer = await OrderReceiverModel.findByIdAndDelete(id);
 }
 }
 

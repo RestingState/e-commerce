@@ -54,6 +54,9 @@ const CustomerSchema = new Schema({
     type: Date,
     default: () => Date.now(),
   },
+  primaryOrderReceiver: [{
+    type: Schema.Types.ObjectId, ref: 'orderReceiver',
+  }],
 });
 
 module.exports = model('Customer', CustomerSchema);

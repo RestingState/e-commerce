@@ -102,7 +102,7 @@ class CustomerController {
   }
   async deleteOrderReceiver(req, res, next){
     try {
-      const id = req.user.id;
+      const id = req.id;
       const deleteOrderReceiver = await customerService.deleteOrderReceiver(id)
       return res.status(200).json(deleteOrderReceiver)
     } catch (e) {

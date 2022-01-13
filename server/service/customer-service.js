@@ -118,7 +118,7 @@ const customer = await OrderReceiverModel.findOneAndUpdate(
   return{customer};
 }
 async deleteOrderReceiver(id){
-  const customer = await OrderReceiverModel.findByIdAndDelete(id);
+  const customer = await OrderReceiverModel.deleteOne(id);
 }
 }
 

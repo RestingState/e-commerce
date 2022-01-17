@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const CustomerSchema = new Schema({
   login: {
@@ -54,6 +54,10 @@ const CustomerSchema = new Schema({
     type: Date,
     default: () => Date.now(),
   },
+  primaryOrderReceiver: {
+    type: Schema.Types.ObjectId,
+    ref: "orderReceiver",
+  },
 });
 
-module.exports = model('Customer', CustomerSchema);
+module.exports = model("Customer", CustomerSchema);

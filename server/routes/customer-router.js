@@ -17,11 +17,26 @@ router.get("/activate/:link", customerController.activate);
 router.get("/refresh", customerController.refresh);
 router.delete("", authMiddleware, customerController.deleteCustomer);
 router.get("/personalInfo", authMiddleware, customerController.getPersonalInfo);
-router.post("/createorderReceiver", customerController.createOrderReceiver);
+router.post("/createOrderReceiver", customerController.createOrderReceiver);
 router.patch(
   "/updateOrderReceiver/:id",
+  authMiddleware,
   customerController.updateOrderReceiver
 );
-router.delete("/delete/:id", customerController.deleteOrderReceiver);
+router.delete(
+  "/deleteOrderReceiver/:id",
+  authMiddleware,
+  customerController.deleteOrderReceiver
+);
+router.get(
+  "/getOrderReceivers",
+  authMiddleware,
+  customerController.getOrderReceivers
+);
+router.get(
+  "/getPrimaryOrderReceiver/:id",
+  authMiddleware,
+  customerController.getPrimaryOrderReceiver
+);
 
 module.exports = router;

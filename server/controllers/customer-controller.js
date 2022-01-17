@@ -97,6 +97,10 @@ class CustomerController {
 
   async createOrderReceiver(req, res, next) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest("Validation error", errors.array()));
+      }
       const data = req.body;
       const customerData = await customerService.createOrderReceiver(data);
       return res.status(201).json(customerData);
@@ -118,9 +122,27 @@ class CustomerController {
 
   async deleteOrderReceiver(req, res, next) {
     try {
-      const id = req.user.id;
+      const id = req.params.id;
       const deleteOrderReceiver = await customerService.deleteOrderReceiver(id);
       return res.status(200).json(deleteOrderReceiver);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async getOrderReceivers(req, res, next) {
+    try {
+      const GetOrderReceivers = await customerService.getOrderReceivers();
+      return res.status(200).json(GetOrderReceivers);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async getPrimaryOrderReceiver(req, res, next) {
+    try {
+      const id = req.user.id;
+      const GetPrimaryOrderReceiver =
+        await customerService.getPrimaryOrderReceiver(id);
+      return res.status(200).json(GetPrimaryOrderReceiver);
     } catch (e) {
       next(e);
     }

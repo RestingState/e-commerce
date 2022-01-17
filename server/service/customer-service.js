@@ -7,6 +7,7 @@ const tokenService = require("./token-service");
 const CustomerDto = require("../dtos/customer-dto");
 const OrderReceiverDto = require("../dtos/orderReceiver-dto");
 const ApiError = require("../exceptions/api-error");
+const orderReceiverModel = require("../models/orderReceiver-model");
 
 class CustomerService {
   async registration(data) {
@@ -113,10 +114,21 @@ class CustomerService {
   }
   async updateOrderReceiver(id, data) {
     const customer = await OrderReceiverModel.findOneAndUpdate(id, data);
-    return { customer };
   }
   async deleteOrderReceiver(id) {
-    const customer = await OrderReceiverModel.deleteOne(id);
+    const customer = await OrderReceiverModel.findByIdAndDelete(id);
+  }
+  async getOrderReceivers() {
+    const customer = await OrderReceiverModel.find({}, "-__v");
+    return customer;
+  }
+  async getPrimaryOrderReceiver(id) {
+    const customer = await CustomerModel.findById(id);
+    const PrimaryOrderReceiver = OrderReceiverModel.findById(
+      customer.primaryOrderReceiver,
+      "-__v -createdAt -updatedAt"
+    );
+    return PrimaryOrderReceiver;
   }
 }
 

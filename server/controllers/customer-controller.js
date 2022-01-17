@@ -95,12 +95,19 @@ class CustomerController {
     }
   }
 
+  async updateCustomer(req, res, next) {
+    try {
+      const id = req.user.id;
+      const data = req.body;
+      const customerData = await customerService.updateCustomer(id, data);
+      return res.status(200).json(customerData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async createOrderReceiver(req, res, next) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return next(ApiError.BadRequest("Validation error", errors.array()));
-      }
       const data = req.body;
       const customerData = await customerService.createOrderReceiver(data);
       return res.status(201).json(customerData);

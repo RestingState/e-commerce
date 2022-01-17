@@ -102,9 +102,15 @@ class CustomerService {
     const customer = await CustomerModel.findById(id, returnFields);
     return customer;
   }
+  async updateCustomer(id, data) {
+    const customer = await CustomerModel.findOneAndUpdate(id, data);
+  }
 
   async createOrderReceiver(data) {
     let candidate = await OrderReceiverModel.findOne({ phone: data.phone });
+    if (!data.phone || !data.name || !data.surname) {
+      throw ApiError.BadRequest("Invalid Input");
+    }
     if (candidate) {
       throw ApiError.AlreadyExist("customer with this phone already exists");
     }
@@ -113,10 +119,10 @@ class CustomerService {
     return { ...orderReceiverDto };
   }
   async updateOrderReceiver(id, data) {
-    const customer = await OrderReceiverModel.findOneAndUpdate(id, data);
+    const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data);
   }
   async deleteOrderReceiver(id) {
-    const customer = await OrderReceiverModel.findByIdAndDelete(id);
+    const orderReceiver = await OrderReceiverModel.findByIdAndDelete(id);
   }
   async getOrderReceivers() {
     const customer = await OrderReceiverModel.find({}, "-__v");

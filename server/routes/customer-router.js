@@ -17,6 +17,11 @@ router.get("/activate/:link", customerController.activate);
 router.get("/refresh", customerController.refresh);
 router.delete("", authMiddleware, customerController.deleteCustomer);
 router.get("/personalInfo", authMiddleware, customerController.getPersonalInfo);
+router.patch(
+  "/updateCustomer",
+  authMiddleware,
+  customerController.updateCustomer
+);
 router.post("/createOrderReceiver", customerController.createOrderReceiver);
 router.patch(
   "/updateOrderReceiver/:id",

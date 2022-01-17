@@ -104,6 +104,7 @@ class CustomerService {
   }
   async updateCustomer(id, data) {
     const customer = await CustomerModel.findOneAndUpdate(id, data);
+    return customer;
   }
 
   async createOrderReceiver(data) {

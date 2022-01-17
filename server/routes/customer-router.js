@@ -18,9 +18,9 @@ router.get("/refresh", customerController.refresh);
 router.delete("", authMiddleware, customerController.deleteCustomer);
 router.get("/personalInfo", authMiddleware, customerController.getPersonalInfo);
 router.patch(
-  "/updateCustomer",
+  "/personalInfo",
   authMiddleware,
-  customerController.updateCustomer
+  customerController.updatePersonalInfo
 );
 router.post(
   "/createOrderReceiver",
@@ -43,7 +43,7 @@ router.get(
   customerController.getOrderReceivers
 );
 router.get(
-  "/getPrimaryOrderReceiver/:id",
+  "/orderReceiver/primary",
   authMiddleware,
   customerController.getPrimaryOrderReceiver
 );

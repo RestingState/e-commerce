@@ -1,18 +1,18 @@
-const customerService = require("../service/customer-service");
-const { validationResult } = require("express-validator");
-const ApiError = require("../exceptions/api-error");
-const res = require("express/lib/response");
+const customerService = require('../service/customer-service');
+const { validationResult } = require('express-validator');
+const ApiError = require('../exceptions/api-error');
+const res = require('express/lib/response');
 
 class CustomerController {
   async registration(req, res, next) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return next(ApiError.BadRequest("Validation error", errors.array()));
+        return next(ApiError.BadRequest('Validation error', errors.array()));
       }
       const data = req.body;
       const customerData = await customerService.registration(data);
-      res.cookie("refreshToken", customerData.refreshToken, {
+      res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
@@ -26,7 +26,7 @@ class CustomerController {
     try {
       const data = req.body;
       const customerData = await customerService.login(data);
-      res.cookie("refreshToken", customerData.refreshToken, {
+      res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
@@ -40,7 +40,7 @@ class CustomerController {
     try {
       const { refreshToken } = req.cookies;
       const token = await customerService.logout(refreshToken);
-      res.clearCookie("refreshToken");
+      res.clearCookie('refreshToken');
       return res.json(token);
     } catch (e) {
       next(e);
@@ -61,7 +61,7 @@ class CustomerController {
     try {
       const { refreshToken } = req.cookies;
       const customerData = await customerService.refresh(refreshToken);
-      res.cookie("refreshToken", customerData.refreshToken, {
+      res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
@@ -95,12 +95,12 @@ class CustomerController {
     }
   }
 
-  async updateCustomer(req, res, next) {
+  async updatePersonalInfo(req, res, next) {
     try {
       const id = req.user.id;
       const data = req.body;
       const customerData = await customerService.updateCustomer(id, data);
-      return res.status(200).json(customerData);
+      return res.status(200).json({ customerData });
     } catch (e) {
       next(e);
     }

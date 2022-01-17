@@ -22,7 +22,11 @@ router.patch(
   authMiddleware,
   customerController.updateCustomer
 );
-router.post("/createOrderReceiver", customerController.createOrderReceiver);
+router.post(
+  "/createOrderReceiver",
+  authMiddleware,
+  customerController.createOrderReceiver
+);
 router.patch(
   "/updateOrderReceiver/:id",
   authMiddleware,
@@ -34,7 +38,7 @@ router.delete(
   customerController.deleteOrderReceiver
 );
 router.get(
-  "/getOrderReceivers",
+  "/getOrderReceivers/:id",
   authMiddleware,
   customerController.getOrderReceivers
 );

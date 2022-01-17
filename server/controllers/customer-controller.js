@@ -109,6 +109,8 @@ class CustomerController {
   async createOrderReceiver(req, res, next) {
     try {
       const data = req.body;
+      const id = req.user.id;
+      data.customerID = id;
       const customerData = await customerService.createOrderReceiver(data);
       return res.status(201).json(customerData);
     } catch (e) {
@@ -138,7 +140,10 @@ class CustomerController {
   }
   async getOrderReceivers(req, res, next) {
     try {
-      const GetOrderReceivers = await customerService.getOrderReceivers();
+      const customerid = req.user.id;
+      const GetOrderReceivers = await customerService.getOrderReceivers(
+        customerid
+      );
       return res.status(200).json(GetOrderReceivers);
     } catch (e) {
       next(e);

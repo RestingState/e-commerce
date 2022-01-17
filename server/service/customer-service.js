@@ -7,6 +7,7 @@ const tokenService = require("./token-service");
 const CustomerDto = require("../dtos/customer-dto");
 const OrderReceiverDto = require("../dtos/orderReceiver-dto");
 const ApiError = require("../exceptions/api-error");
+const mongoose = require("mongoose");
 
 class CustomerService {
   async registration(data) {
@@ -106,7 +107,7 @@ class CustomerService {
   }
 
   async createOrderReceiver(data) {
-    let candidate = await OrderReceiverModel.findOne({ phone: data.phone });
+    const candidate = await OrderReceiverModel.findOne({ phone: data.phone });
     if (!data.phone || !data.name || !data.surname) {
       throw ApiError.BadRequest("Invalid Input");
     }
@@ -118,17 +119,34 @@ class CustomerService {
     return { ...orderReceiverDto };
   }
   async updateOrderReceiver(id, data) {
+    const candidate = await OrderReceiverModel.findOne({ phone: data.phone });
+    if (candidate) {
+      throw ApiError.AlreadyExist("customer with this phone already exists");
+    }
     const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data);
   }
   async deleteOrderReceiver(id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw ApiError.BadRequest("ID is incorrect");
+    }
+    const candidate = await OrderReceiverModel.findById(id);
+    if (!candidate) {
+      throw ApiError.NotFound("No user found");
+    }
     const orderReceiver = await OrderReceiverModel.findByIdAndDelete(id);
   }
-  async getOrderReceivers() {
-    const customer = await OrderReceiverModel.find({}, "-__v");
-    return customer;
+  async getOrderReceivers(customerID) {
+    const orderReceiver = await OrderReceiverModel.find(
+      { customerID },
+      "-__v -createdAt -updatedAt"
+    );
+    return orderReceiver;
   }
   async getPrimaryOrderReceiver(id) {
     const customer = await CustomerModel.findById(id);
+    if (!customer.primaryOrderReceiver) {
+      throw ApiError.NotFound("No primary order receiver found");
+    }
     const PrimaryOrderReceiver = OrderReceiverModel.findById(
       customer.primaryOrderReceiver,
       "-__v -createdAt -updatedAt"

@@ -133,7 +133,7 @@ class CustomerController {
     try {
       const id = req.params.id;
       const deleteOrderReceiver = await customerService.deleteOrderReceiver(id);
-      return res.status(200).json(deleteOrderReceiver);
+      return res.status(204);
     } catch (e) {
       next(e);
     }

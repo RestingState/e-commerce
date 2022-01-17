@@ -7,7 +7,6 @@ const tokenService = require("./token-service");
 const CustomerDto = require("../dtos/customer-dto");
 const OrderReceiverDto = require("../dtos/orderReceiver-dto");
 const ApiError = require("../exceptions/api-error");
-const orderReceiverModel = require("../models/orderReceiver-model");
 
 class CustomerService {
   async registration(data) {

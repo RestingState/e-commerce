@@ -1,7 +1,6 @@
 const customerService = require('../service/customer-service');
 const { validationResult } = require('express-validator');
 const ApiError = require('../exceptions/api-error');
-const res = require('express/lib/response');
 
 class CustomerController {
   async registration(req, res, next) {

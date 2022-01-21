@@ -26,8 +26,7 @@ class ImageController {
     try {
       const imageId = req.params.id;
       imageService.deleteImage(imageId);
-      // res.status(204);
-      res.send('hoooray');
+      res.status(204).send('deleted');
     } catch (e) {
       next(e);
     }

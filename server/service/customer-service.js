@@ -126,7 +126,8 @@ class CustomerService {
     const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data, {
       new: true,
     });
-    return orderReceiver;
+    const orderReceiverDto = new OrderReceiverDto(orderReceiver);
+    return { ...orderReceiverDto };
   }
   async deleteOrderReceiver(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {

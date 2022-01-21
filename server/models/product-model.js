@@ -9,7 +9,6 @@ const ProductSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'category',
-      require: true,
     },
   ],
   parameters: [{}],
@@ -18,14 +17,12 @@ const ProductSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'delivery',
-      require: true,
     },
   ],
   paymentTypes: [
     {
       type: Schema.Types.ObjectId,
       ref: 'payment',
-      require: true,
     },
   ],
   guarantee: String,

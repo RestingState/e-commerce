@@ -5,11 +5,29 @@ const ProductSchema = new Schema({
     type: String,
     required: true,
   },
-  categories: [{}],
+  categories: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'category',
+      require: true,
+    },
+  ],
   parameters: [{}],
   description: String,
-  deliveryTypes: [{}],
-  paymentTypes: [{}],
+  deliveryTypes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'delivery',
+      require: true,
+    },
+  ],
+  paymentTypes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'payment',
+      require: true,
+    },
+  ],
   guarantee: String,
   returnPolicy: String,
   price: Number,

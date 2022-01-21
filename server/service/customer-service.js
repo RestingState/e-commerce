@@ -115,15 +115,18 @@ class CustomerService {
       throw ApiError.AlreadyExist('customer with this phone already exists');
     }
     const orderReceiver = await OrderReceiverModel.create(data);
-    const orderReceiverDto = new OrderReceiverDto(orderReceiver);
-    return { ...orderReceiverDto };
+    const id = orderReceiver.id;
+    return { id };
   }
   async updateOrderReceiver(id, data) {
     const candidate = await OrderReceiverModel.findOne({ phone: data.phone });
     if (candidate) {
       throw ApiError.AlreadyExist('customer with this phone already exists');
     }
-    const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data);
+    const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data, {
+      new: true,
+    });
+    return orderReceiver;
   }
   async deleteOrderReceiver(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {

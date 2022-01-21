@@ -47,5 +47,20 @@ router.get(
   authMiddleware,
   customerController.getPrimaryOrderReceiver
 );
+router.post(
+  '/basket/product/:id',
+  authMiddleware,
+  customerController.addToBasket
+);
+router.delete(
+  '/basket/deleteProduct/:id',
+  authMiddleware,
+  customerController.deleteFromBasket
+);
+router.get(
+  '/basket/items',
+  authMiddleware,
+  customerController.getProductsFromBasket
+);
 
 module.exports = router;

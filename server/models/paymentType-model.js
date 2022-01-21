@@ -7,4 +7,4 @@ const PaymentTypeSchema = new Schema({
   },
 });
 
-module.exports = model('OrderReceiver', PaymentTypeSchema);
+module.exports = model('PaymentType', PaymentTypeSchema);

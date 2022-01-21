@@ -7,4 +7,4 @@ const CategorySchema = new Schema({
   },
 });
 
-module.exports = model('OrderReceiver', CategorySchema);
+module.exports = model('Category', CategorySchema);

@@ -31,4 +31,4 @@ const ProductSchema = new Schema({
   imgs: [''],
 });
 
-module.exports = model('OrderReceiver', ProductSchema);
+module.exports = model('Product', ProductSchema);

@@ -1,5 +1,6 @@
 const CustomerModel = require('../models/customer-model');
 const OrderReceiverModel = require('../models/orderReceiver-model');
+const BasketModel = require('../models/basket-model');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const mailService = require('./mail-service');
@@ -156,6 +157,19 @@ class CustomerService {
       '-__v -createdAt -updatedAt'
     );
     return PrimaryOrderReceiver;
+  }
+  async addToBasket(customerID, productID) {
+    const productInBasket = await BasketModel.create({ customerID, productID });
+    return productInBasket;
+  }
+  async deleteFromBasket(id) {
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      const deleteFromBasket = await BasketModel.findByIdAndDelete(id);
+    }
+  }
+  async getProductsFromBasket(customerID) {
+    const productInBasket = await BasketModel.find({ customerID }, '-__v');
+    return productInBasket;
   }
 }
 

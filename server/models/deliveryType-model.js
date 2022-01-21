@@ -7,4 +7,4 @@ const DeliveryTypeSchema = new Schema({
   },
 });
 
-module.exports = model('OrderReceiver', DeliveryTypeSchema);
+module.exports = model('DeliveryType', DeliveryTypeSchema);

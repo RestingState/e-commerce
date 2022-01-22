@@ -124,9 +124,13 @@ class CustomerService {
     if (candidate) {
       throw ApiError.AlreadyExist('customer with this phone already exists');
     }
-    const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data, {
-      new: true,
-    });
+    const orderReceiver = await OrderReceiverModel.findOneAndUpdate(
+      { customerID: id },
+      data,
+      {
+        new: true,
+      }
+    );
     const orderReceiverDto = new OrderReceiverDto(orderReceiver);
     return { ...orderReceiverDto };
   }
@@ -158,19 +162,5 @@ class CustomerService {
     );
     return PrimaryOrderReceiver;
   }
-  async addToBasket(customerID, productID) {
-    const productInBasket = await BasketModel.create({ customerID, productID });
-    return productInBasket;
-  }
-  async deleteFromBasket(id) {
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      const deleteFromBasket = await BasketModel.findByIdAndDelete(id);
-    }
-  }
-  async getProductsFromBasket(customerID) {
-    const productInBasket = await BasketModel.find({ customerID }, '-__v');
-    return productInBasket;
-  }
 }
-
 module.exports = new CustomerService();

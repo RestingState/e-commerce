@@ -1,7 +1,7 @@
-const ProductModel = '..models/product-model';
-const CategoryModel = '..models/category-model';
-const DeliveryTypeModel = '..models/deliveryType-model';
-const PaymentTypeModel = '..models/paymentType-model';
+const ProductModel = require('../models/product-model');
+const CategoryModel = require('../models/category-model');
+const DeliveryTypeModel = require('../models/deliveryType-model');
+const PaymentTypeModel = require('../models/paymentType-model');
 
 class ProductService {
   async getProduct(id) {
@@ -16,7 +16,7 @@ class ProductService {
     const deliveryType = await DeliveryTypeModel.findById(id);
     return deliveryType;
   }
-  async getProduct(id) {
+  async getPaymentType(id) {
     const paymentType = await PaymentTypeModel.findById(id);
     return paymentType;
   }

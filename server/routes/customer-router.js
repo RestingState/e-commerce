@@ -1,6 +1,7 @@
 const Router = require('express');
 const router = new Router();
 const customerController = require('../controllers/customer-controller');
+const basketController = require('../controllers/basket-controller');
 const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
 
@@ -23,22 +24,22 @@ router.patch(
   customerController.updatePersonalInfo
 );
 router.post(
-  '/createOrderReceiver',
+  '/OrderReceiver',
   authMiddleware,
   customerController.createOrderReceiver
 );
 router.patch(
-  '/updateOrderReceiver/:id',
+  '/OrderReceiver',
   authMiddleware,
   customerController.updateOrderReceiver
 );
 router.delete(
-  '/deleteOrderReceiver/:id',
+  '/OrderReceiver/:id',
   authMiddleware,
   customerController.deleteOrderReceiver
 );
 router.get(
-  '/getOrderReceivers/:id',
+  '/OrderReceivers',
   authMiddleware,
   customerController.getOrderReceivers
 );
@@ -50,17 +51,17 @@ router.get(
 router.post(
   '/basket/product/:id',
   authMiddleware,
-  customerController.addToBasket
+  basketController.addToBasket
 );
 router.delete(
   '/basket/deleteProduct/:id',
   authMiddleware,
-  customerController.deleteFromBasket
+  basketController.deleteFromBasket
 );
 router.get(
   '/basket/items',
   authMiddleware,
-  customerController.getProductsFromBasket
+  basketController.getProductsFromBasket
 );
 
 module.exports = router;

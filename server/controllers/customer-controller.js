@@ -159,39 +159,6 @@ class CustomerController {
       next(e);
     }
   }
-  async addToBasket(req, res, next) {
-    try {
-      const customerID = req.user.id;
-      const productID = req.params.id;
-      const productInBasket = await customerService.addToBasket(
-        customerID,
-        productID
-      );
-      return res.status(200).json(productInBasket);
-    } catch (e) {
-      next(e);
-    }
-  }
-  async deleteFromBasket(req, res, next) {
-    try {
-      const id = req.params.id;
-      const deleteFromBasket = await customerService.deleteFromBasket(id);
-      return res.status(204);
-    } catch (e) {
-      next(e);
-    }
-  }
-  async getProductsFromBasket(req, res, next) {
-    try {
-      const id = req.user.id;
-      const productsFromBasket = await customerService.getProductsFromBasket(
-        id
-      );
-      return res.status(200).json(productsFromBasket);
-    } catch (e) {
-      next(e);
-    }
-  }
 }
 
 module.exports = new CustomerController();

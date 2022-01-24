@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 var gridfsBucket;
 mongoose.connection.on('open', () => {
   gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-    bucketName: 'images',
+    bucketName: 'images'
   });
 });
 

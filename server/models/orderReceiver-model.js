@@ -1,34 +1,34 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const OrderReceiverSchema = new Schema({
   customerID: {
     type: Schema.Types.ObjectId,
-    ref: "Customer",
-    require: true,
+    ref: 'Customer',
+    require: true
   },
   name: {
     type: String,
-    required: true,
+    required: true
   },
   surname: {
     type: String,
-    required: true,
+    required: true
   },
   middleName: String,
   phone: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   createdAt: {
     type: Date,
     immutable: true,
-    default: () => Date.now(),
+    default: () => Date.now()
   },
   updatedAt: {
     type: Date,
-    default: () => Date.now(),
-  },
+    default: () => Date.now()
+  }
 });
 
-module.exports = model("OrderReceiver", OrderReceiverSchema);
+module.exports = model('OrderReceiver', OrderReceiverSchema);

@@ -6,11 +6,11 @@ const storage = new GridFsStorage({
   file: (req, file) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
       return {
-        bucketName: 'images',
+        bucketName: 'images'
       };
     } else {
       return null;
     }
-  },
+  }
 });
 module.exports = multer({ storage });

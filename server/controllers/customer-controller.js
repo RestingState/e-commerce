@@ -13,7 +13,7 @@ class CustomerController {
       const customerData = await customerService.registration(data);
       res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true
       });
       return res.status(201).json(customerData);
     } catch (e) {
@@ -27,7 +27,7 @@ class CustomerController {
       const customerData = await customerService.login(data);
       res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true
       });
       return res.json(customerData);
     } catch (e) {
@@ -62,7 +62,7 @@ class CustomerController {
       const customerData = await customerService.refresh(refreshToken);
       res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true
       });
       return res.json(customerData);
     } catch (e) {

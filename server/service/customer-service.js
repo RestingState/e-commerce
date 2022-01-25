@@ -108,20 +108,15 @@ class CustomerService {
   }
 
   async createDeliveryAddress(data) {
-    if(!data.city || !data.street || !data.houseNum){
-      throw ApiError.BadRequest("Invalid input");
-    }
     const candidate = (data.flatNum ?
       await DeliveryAddressModel.findOne({city: data.city, street: data.street, houseNum: data.houseNum, flatNum: data.flatNum}) :
       await DeliveryAddressModel.findOne({city: data.city, street: data.street, houseNum: data.houseNum})
     );
-
     if(candidate){
       throw ApiError.AlreadyExist("This delivery address already exists");
     }
 
     const deliveryAddress = await DeliveryAddressModel.create(data);
-
     const customer = await CustomerModel.findById(data.customerID);
     if (!customer.primaryDeliveryAddress) {
       await CustomerModel.findByIdAndUpdate(data.customerID, {primaryDeliveryAddress: deliveryAddress._id});
@@ -132,9 +127,6 @@ class CustomerService {
   }
 
   async updateDeliveryAddress(id, data) {
-    if(!data.city || !data.street || !data.houseNum){
-      throw ApiError.BadRequest("Invalid input");
-    }
     if(!mongoose.Types.ObjectId.isValid(id)){
       throw ApiError.BadRequest("Invalid id");
     }
@@ -147,7 +139,9 @@ class CustomerService {
       throw ApiError.AlreadyExist("This delivery address already exists");
     }
 
-    return (await DeliveryAddressModel.findByIdAndUpdate(id, data));
+    const deliveryAddress = await DeliveryAddressModel.findByIdAndUpdate(id, data, {new: true});
+    const deliveryAddressDto = new DeliveryAddressDto(deliveryAddress);
+    return { ...deliveryAddressDto};
   }
 
   async deleteDeliveryAddress(customerID, delAdrID) {
@@ -166,17 +160,11 @@ class CustomerService {
       const newPrimaryDeliveryAddressID = deliveryAddress.length ? deliveryAddress[0]._id : null;
       
       await CustomerModel.findByIdAndUpdate(customerID, {primaryDeliveryAddress: newPrimaryDeliveryAddressID});
-    }
-
-
-    return deletedDeliveryAddress;
+    };
   }
 
   async getDeliveryAddress(CustomerID) {
     const deliveryAddress = await DeliveryAddressModel.find({customerID: CustomerID}, '-__v');
-    if(!deliveryAddress.length) {                           //   Doesn't work??
-      ApiError.NotFound("No delivery addresses found");     //
-    }                                                       //
     return deliveryAddress;
   }
 

@@ -23,29 +23,33 @@ router.patch(
   customerController.updatePersonalInfo
 );
 router.post(
-  '/createDeliveryAddress',
+  '/DeliveryAddress',
   authMiddleware,
+  body('houseNum').isNumeric(),
+  body('flatNum').if(body('flatNum').exists()).isNumeric(),
   customerController.createDeliveryAddress
 );
 router.patch(
-  '/updateDeliveryAddress/:id',
+  '/DeliveryAddress/:id',
   authMiddleware,
+  body('houseNum').if(body('houseNum').exists()).isNumeric(),
+  body('flatNum').if(body('flatNum').exists()).isNumeric(),
   customerController.updateDeliveryAddress
 );
 router.delete(
-  '/deleteDeliveryAddress/:id',
+  '/DeliveryAddress/:id',
   authMiddleware,
   customerController.deleteDeliveryAddress
-);
-router.get(
-  '/getDeliveryAddress',
-  authMiddleware,
-  customerController.getDeliveryAddress
 );
 router.get(
   '/DeliveryAddress/primary',
   authMiddleware,
   customerController.getPrimaryDeliveryAddress
+);
+router.get(
+  '/DeliveryAddresses',
+  authMiddleware,
+  customerController.getDeliveryAddress
 );
 
 module.exports = router;

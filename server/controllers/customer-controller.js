@@ -107,6 +107,10 @@ class CustomerController {
 
   async createDeliveryAddress(req, res, next) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()));
+      }
       const data = req.body;
       data.customerID = req.user.id;;
       const Data = await customerService.createDeliveryAddress(data);
@@ -118,6 +122,10 @@ class CustomerController {
 
   async updateDeliveryAddress(req, res, next) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()));
+      }
       const id = req.params.id;
       const data = req.body;
       const Data = await customerService.updateDeliveryAddress(id, data);
@@ -132,7 +140,7 @@ class CustomerController {
       const delAdrID = req.params.id;
       const customerID = req.user.id;
       const deletedDeliveryAddress = await customerService.deleteDeliveryAddress(customerID, delAdrID);
-      return res.status(200).json(deletedDeliveryAddress);
+      return res.status(200).json("Delivery address had beed successfully deleted");
     } catch (e) {
       next(e);
     }

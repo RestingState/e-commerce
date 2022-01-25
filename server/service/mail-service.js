@@ -10,7 +10,7 @@ class MailService {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD
       }
-    })
+    });
   }
 
   async sendActivationMail(to, link) {
@@ -19,14 +19,13 @@ class MailService {
       to,
       subject: 'Активация аккаунта на ' + process.env.API_URL,
       text: '',
-      html: 
-        `
+      html: `
           <div>
             <h1>Для активации перейдите по ссылке</h1>
             <a href="${link}">${link}</a>
           </div>
         `
-    })
+    });
   }
 }
 

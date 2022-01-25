@@ -13,7 +13,7 @@ class CustomerController {
       const customerData = await customerService.registration(data);
       res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true
       });
       return res.status(201).json(customerData);
     } catch (e) {
@@ -27,7 +27,7 @@ class CustomerController {
       const customerData = await customerService.login(data);
       res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true
       });
       return res.json(customerData);
     } catch (e) {
@@ -62,7 +62,7 @@ class CustomerController {
       const customerData = await customerService.refresh(refreshToken);
       res.cookie('refreshToken', customerData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: true
       });
       return res.json(customerData);
     } catch (e) {
@@ -104,6 +104,62 @@ class CustomerController {
       next(e);
     }
   }
+  
+  async createOrderReceiver(req, res, next) {
+    try {
+      const data = req.body;
+      const id = req.user.id;
+      data.customerID = id;
+      const customerData = await customerService.createOrderReceiver(data);
+      return res.status(201).json(customerData);
+    } catch (e) {
+      next(e);
+    }
+  }
+  
+  async updateOrderReceiver(req, res, next) {
+    try {
+      const id = req.user.id;
+      const data = req.body;
+      const customerData = await customerService.updateOrderReceiver(id, data);
+      return res.status(200).json(customerData);
+    } catch (e) {
+      next(e);
+    }
+  }
+  
+  async deleteOrderReceiver(req, res, next) {
+    try {
+      const id = req.params.id;
+      const deleteOrderReceiver = await customerService.deleteOrderReceiver(id);
+      return res.status(200).json(deleteOrderReceiver);
+    } catch (e) {
+      next(e);
+    }
+  }
+  
+  async getOrderReceivers(req, res, next) {
+    try {
+      const customerid = req.user.id;
+      const GetOrderReceivers = await customerService.getOrderReceivers(
+        customerid
+      );
+      return res.status(200).json(GetOrderReceivers);
+    } catch (e) {
+      next(e);
+    }
+  }
+  
+  async getPrimaryOrderReceiver(req, res, next) {
+    try {
+      const id = req.user.id;
+      const GetPrimaryOrderReceiver =
+        await customerService.getPrimaryOrderReceiver(id);
+      return res.status(200).json(GetPrimaryOrderReceiver);
+    } catch (e) {
+      next(e);
+    }
+  }
 
   async createDeliveryAddress(req, res, next) {
     try {
@@ -119,7 +175,7 @@ class CustomerController {
       next(e);
     }
   }
-
+  
   async updateDeliveryAddress(req, res, next) {
     try {
       const errors = validationResult(req);
@@ -134,7 +190,7 @@ class CustomerController {
       next(e);
     }
   }
-
+  
   async deleteDeliveryAddress(req, res, next) {
     try {
       const delAdrID = req.params.id;
@@ -145,6 +201,7 @@ class CustomerController {
       next(e);
     }
   }
+  
   async getDeliveryAddress(req, res, next) {
     try {
       const id = req.user.id;
@@ -154,6 +211,7 @@ class CustomerController {
       next(e);
     }
   }
+  
   async getPrimaryDeliveryAddress(req, res, next) {
     try {
       const id = req.user.id;
@@ -163,8 +221,6 @@ class CustomerController {
       next(e);
     }
   }
-
-  
 }
 
 module.exports = new CustomerController();

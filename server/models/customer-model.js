@@ -4,11 +4,11 @@ const CustomerSchema = new Schema({
   login: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
-    required: true,
+    required: true
   },
   // role: {
   //   type: String,
@@ -17,22 +17,22 @@ const CustomerSchema = new Schema({
   // },
   name: {
     type: String,
-    required: true,
+    required: true
   },
   surname: {
     type: String,
-    required: true,
+    required: true
   },
   middleName: String,
   phone: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   birthday: String,
   sex: String,
@@ -40,23 +40,28 @@ const CustomerSchema = new Schema({
   additionalInfo: [String],
   isActivated: {
     type: Boolean,
-    default: false,
+    default: false
   },
   activationLink: {
-    type: String,
+    type: String
   },
   createdAt: {
     type: Date,
     immutable: true,
-    default: () => Date.now(),
+    default: () => Date.now()
   },
   updatedAt: {
     type: Date,
-    default: () => Date.now(),
+    default: () => Date.now()
   },
   primaryDeliveryAddress: {
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    ref: 'deliveryAddress'
   },
+  primaryOrderReceiver: {
+    type: Schema.Types.ObjectId,
+    ref: 'orderReceiver'
+  }
 });
 
 module.exports = model("Customer", CustomerSchema);

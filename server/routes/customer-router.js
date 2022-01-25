@@ -23,6 +23,30 @@ router.patch(
   customerController.updatePersonalInfo
 );
 router.post(
+  '/createOrderReceiver',
+  authMiddleware,
+  customerController.createOrderReceiver
+);
+router.patch(
+  '/updateOrderReceiver/:id',
+  authMiddleware,
+  customerController.updateOrderReceiver
+);
+router.delete(
+  '/deleteOrderReceiver/:id',
+  authMiddleware,
+  customerController.deleteOrderReceiver
+);
+router.get(
+  '/getOrderReceivers/:id',
+  authMiddleware,
+  customerController.getOrderReceivers
+);
+router.get(
+  '/orderReceiver/primary',
+  authMiddleware,
+  customerController.getPrimaryOrderReceiver);
+router.post(
   '/DeliveryAddress',
   authMiddleware,
   body('houseNum').isNumeric(),
@@ -49,7 +73,6 @@ router.get(
 router.get(
   '/DeliveryAddresses',
   authMiddleware,
-  customerController.getDeliveryAddress
-);
+  customerController.getDeliveryAddress);
 
 module.exports = router;

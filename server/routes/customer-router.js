@@ -45,7 +45,34 @@ router.get(
 router.get(
   '/orderReceiver/primary',
   authMiddleware,
-  customerController.getPrimaryOrderReceiver
+  customerController.getPrimaryOrderReceiver);
+router.post(
+  '/DeliveryAddress',
+  authMiddleware,
+  body('houseNum').isNumeric(),
+  body('flatNum').if(body('flatNum').exists()).isNumeric(),
+  customerController.createDeliveryAddress
 );
+router.patch(
+  '/DeliveryAddress/:id',
+  authMiddleware,
+  body('houseNum').if(body('houseNum').exists()).isNumeric(),
+  body('flatNum').if(body('flatNum').exists()).isNumeric(),
+  customerController.updateDeliveryAddress
+);
+router.delete(
+  '/DeliveryAddress/:id',
+  authMiddleware,
+  customerController.deleteDeliveryAddress
+);
+router.get(
+  '/DeliveryAddress/primary',
+  authMiddleware,
+  customerController.getPrimaryDeliveryAddress
+);
+router.get(
+  '/DeliveryAddresses',
+  authMiddleware,
+  customerController.getDeliveryAddress);
 
 module.exports = router;

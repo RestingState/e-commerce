@@ -1,31 +1,21 @@
 const CustomerModel = require('../models/customer-model');
 const OrderReceiverModel = require('../models/orderReceiver-model');
-const DeliveryAddressModel = require("../models/deliveryAddress-model");
+const DeliveryAddressModel = require('../models/deliveryAddress-model');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const mailService = require('./mail-service');
 const tokenService = require('./token-service');
 const CustomerDto = require('../dtos/customer-dto');
 const OrderReceiverDto = require('../dtos/orderReceiver-dto');
-const DeliveryAddressDto = require("../dtos/deliveryAddress-dto");
+const DeliveryAddressDto = require('../dtos/deliveryAddress-dto');
 const ApiError = require('../exceptions/api-error');
 const mongoose = require('mongoose');
 
 class CustomerService {
   async registration(data) {
-    let candidate = await CustomerModel.findOne({ login: data.login });
-    if (candidate) {
-      throw ApiError.AlreadyExist("customer with this login already exists");
+    if (!data.password) {
+      throw ApiError.BadRequest('no password was provided');
     }
-    candidate = await CustomerModel.findOne({ phone: data.phone });
-    if (candidate) {
-      throw ApiError.AlreadyExist("customer with this phone already exists");
-    }
-    candidate = await CustomerModel.findOne({ email: data.email });
-    if (candidate) {
-      throw ApiError.AlreadyExist("customer with this email already exists");
-    }
-
     const hashPassword = await bcrypt.hash(data.password, 3);
     const activationLink = uuid.v4();
     data.password = hashPassword;
@@ -46,7 +36,7 @@ class CustomerService {
   async activate(activationLink) {
     const customer = await CustomerModel.findOne({ activationLink });
     if (!customer) {
-      throw ApiError.BadRequest("Неккоректная ссылка активации");
+      throw ApiError.BadRequest('Неккоректная ссылка активации');
     }
     customer.isActivated = true;
     console.log(customer);
@@ -108,7 +98,7 @@ class CustomerService {
     const customer = await CustomerModel.findOneAndUpdate(id, data);
     return customer;
   }
-  
+
   async createOrderReceiver(data) {
     const candidate = await OrderReceiverModel.findOne({ phone: data.phone });
     if (!data.phone || !data.name || !data.surname) {
@@ -121,7 +111,7 @@ class CustomerService {
     const orderReceiverDto = new OrderReceiverDto(orderReceiver);
     return { ...orderReceiverDto };
   }
-  
+
   async updateOrderReceiver(id, data) {
     const candidate = await OrderReceiverModel.findOne({ phone: data.phone });
     if (candidate) {
@@ -129,7 +119,7 @@ class CustomerService {
     }
     const orderReceiver = await OrderReceiverModel.findOneAndUpdate(id, data);
   }
-  
+
   async deleteOrderReceiver(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.BadRequest('ID is incorrect');
@@ -140,7 +130,7 @@ class CustomerService {
     }
     const orderReceiver = await OrderReceiverModel.findByIdAndDelete(id);
   }
-  
+
   async getOrderReceivers(customerID) {
     const orderReceiver = await OrderReceiverModel.find(
       { customerID },
@@ -148,7 +138,7 @@ class CustomerService {
     );
     return orderReceiver;
   }
-  
+
   async getPrimaryOrderReceiver(id) {
     const customer = await CustomerModel.findById(id);
     if (!customer.primaryOrderReceiver) {
@@ -160,20 +150,30 @@ class CustomerService {
     );
     return PrimaryOrderReceiver;
   }
-  
-   async createDeliveryAddress(data) {
-    const candidate = (data.flatNum ?
-      await DeliveryAddressModel.findOne({city: data.city, street: data.street, houseNum: data.houseNum, flatNum: data.flatNum}) :
-      await DeliveryAddressModel.findOne({city: data.city, street: data.street, houseNum: data.houseNum})
-    );
-    if(candidate){
-      throw ApiError.AlreadyExist("This delivery address already exists");
+
+  async createDeliveryAddress(data) {
+    const candidate = data.flatNum
+      ? await DeliveryAddressModel.findOne({
+          city: data.city,
+          street: data.street,
+          houseNum: data.houseNum,
+          flatNum: data.flatNum
+        })
+      : await DeliveryAddressModel.findOne({
+          city: data.city,
+          street: data.street,
+          houseNum: data.houseNum
+        });
+    if (candidate) {
+      throw ApiError.AlreadyExist('This delivery address already exists');
     }
 
     const deliveryAddress = await DeliveryAddressModel.create(data);
     const customer = await CustomerModel.findById(data.customerID);
     if (!customer.primaryDeliveryAddress) {
-      await CustomerModel.findByIdAndUpdate(data.customerID, {primaryDeliveryAddress: deliveryAddress._id});
+      await CustomerModel.findByIdAndUpdate(data.customerID, {
+        primaryDeliveryAddress: deliveryAddress._id
+      });
     }
 
     const deliveryAddressDto = new DeliveryAddressDto(deliveryAddress);
@@ -181,55 +181,80 @@ class CustomerService {
   }
 
   async updateDeliveryAddress(id, data) {
-    if(!mongoose.Types.ObjectId.isValid(id)){
-      throw ApiError.BadRequest("Invalid id");
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw ApiError.BadRequest('Invalid id');
     }
     const candidateID = await DeliveryAddressModel.findById(id);
     if (!candidateID) {
-      throw ApiError.BadRequest("A delivery address with this ID does not exist");
+      throw ApiError.BadRequest(
+        'A delivery address with this ID does not exist'
+      );
     }
-    const candidateAdr = await DeliveryAddressModel.findOne({city: data.city, street: data.street, houseNum: data.houseNum});
-    if(candidateAdr){
-      throw ApiError.AlreadyExist("This delivery address already exists");
+    const candidateAdr = await DeliveryAddressModel.findOne({
+      city: data.city,
+      street: data.street,
+      houseNum: data.houseNum
+    });
+    if (candidateAdr) {
+      throw ApiError.AlreadyExist('This delivery address already exists');
     }
 
-    const deliveryAddress = await DeliveryAddressModel.findByIdAndUpdate(id, data, {new: true});
+    const deliveryAddress = await DeliveryAddressModel.findByIdAndUpdate(
+      id,
+      data,
+      { new: true }
+    );
     const deliveryAddressDto = new DeliveryAddressDto(deliveryAddress);
-    return { ...deliveryAddressDto};
+    return { ...deliveryAddressDto };
   }
 
   async deleteDeliveryAddress(customerID, delAdrID) {
-    if(!mongoose.Types.ObjectId.isValid(delAdrID)){
-      throw ApiError.BadRequest("Invalid id");
+    if (!mongoose.Types.ObjectId.isValid(delAdrID)) {
+      throw ApiError.BadRequest('Invalid id');
     }
     const candidate = await DeliveryAddressModel.findById(delAdrID);
     if (!candidate) {
-      throw ApiError.BadRequest("A delivery address with this ID does not exist");
+      throw ApiError.BadRequest(
+        'A delivery address with this ID does not exist'
+      );
     }
 
-    const deletedDeliveryAddress = await DeliveryAddressModel.findByIdAndDelete(delAdrID);
+    const deletedDeliveryAddress = await DeliveryAddressModel.findByIdAndDelete(
+      delAdrID
+    );
     const customer = await CustomerModel.findById(customerID);
     if (customer.primaryDeliveryAddress == delAdrID) {
-      const deliveryAddress = await DeliveryAddressModel.find({customerID: customerID});
-      const newPrimaryDeliveryAddressID = deliveryAddress.length ? deliveryAddress[0]._id : null;
-      
-      await CustomerModel.findByIdAndUpdate(customerID, {primaryDeliveryAddress: newPrimaryDeliveryAddressID});
-    };
+      const deliveryAddress = await DeliveryAddressModel.find({
+        customerID: customerID
+      });
+      const newPrimaryDeliveryAddressID = deliveryAddress.length
+        ? deliveryAddress[0]._id
+        : null;
+
+      await CustomerModel.findByIdAndUpdate(customerID, {
+        primaryDeliveryAddress: newPrimaryDeliveryAddressID
+      });
+    }
   }
 
   async getDeliveryAddress(CustomerID) {
-    const deliveryAddress = await DeliveryAddressModel.find({customerID: CustomerID}, '-__v');
+    const deliveryAddress = await DeliveryAddressModel.find(
+      { customerID: CustomerID },
+      '-__v'
+    );
     return deliveryAddress;
   }
 
   async getPrimaryDeliveryAddress(id) {
     const customer = await CustomerModel.findById(id);
     if (!customer.primaryDeliveryAddress) {
-      throw ApiError.NotFound("No primary delivery address found");
+      throw ApiError.NotFound('No primary delivery address found');
     }
-    const PrimaryDeliveryAddress = DeliveryAddressModel.findById(customer.primaryDeliveryAddress);
+    const PrimaryDeliveryAddress = DeliveryAddressModel.findById(
+      customer.primaryDeliveryAddress
+    );
     return PrimaryDeliveryAddress;
   }
-}  
+}
 
 module.exports = new CustomerService();

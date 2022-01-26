@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const CustomerSchema = new Schema({
   login: {
@@ -64,4 +65,6 @@ const CustomerSchema = new Schema({
   }
 });
 
-module.exports = model("Customer", CustomerSchema);
+CustomerSchema.plugin(uniqueValidator);
+
+module.exports = model('Customer', CustomerSchema);

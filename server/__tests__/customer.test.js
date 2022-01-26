@@ -42,5 +42,60 @@ describe('customer', () => {
         expect(body.message).toBe('Validation error');
       });
     });
+
+    describe('given the absence of password', () => {
+      it('should return a 400 status and json with message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/registration`)
+          .send(customerData.customerPasswordAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.message).toBe('Validation error');
+      });
+    });
+
+    describe('given the absence of name', () => {
+      it('should return a 400 status and json with message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/registration`)
+          .send(customerData.customerNameAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.message).toBe('Validation error');
+      });
+    });
+
+    describe('given the absence of surname', () => {
+      it('should return a 400 status and json with message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/registration`)
+          .send(customerData.customerSurnameAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.message).toBe('Validation error');
+      });
+    });
+
+    describe('given the absence of phone', () => {
+      it('should return a 400 status and json with message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/registration`)
+          .send(customerData.customerPhoneAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.message).toBe('Validation error');
+      });
+    });
+
+    describe('given the absence of email', () => {
+      it('should return a 400 status and json with message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/registration`)
+          .send(customerData.customerEmailAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.message).toBe('Validation error');
+      });
+    });
   });
 });

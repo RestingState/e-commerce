@@ -6,9 +6,9 @@ const authMiddleware = require('../middlewares/auth-middleware');
 
 router.post(
   '/registration',
-  body('login').isLength({ min: 5, max: 32 }),
-  body('password').isLength({ min: 5, max: 32 }),
-  body('email').isEmail(),
+  // body('login').isLength({ min: 5, max: 32 }),
+  // body('password').isLength({ min: 5, max: 32 }),
+  // body('email').isEmail(),
   customerController.registration
 );
 router.post('/login', customerController.login);
@@ -45,7 +45,8 @@ router.get(
 router.get(
   '/orderReceiver/primary',
   authMiddleware,
-  customerController.getPrimaryOrderReceiver);
+  customerController.getPrimaryOrderReceiver
+);
 router.post(
   '/DeliveryAddress',
   authMiddleware,
@@ -73,6 +74,7 @@ router.get(
 router.get(
   '/DeliveryAddresses',
   authMiddleware,
-  customerController.getDeliveryAddress);
+  customerController.getDeliveryAddress
+);
 
 module.exports = router;

@@ -5,10 +5,10 @@ const ApiError = require('../exceptions/api-error');
 class CustomerController {
   async registration(req, res, next) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return next(ApiError.BadRequest('Validation error', errors.array()));
-      }
+      // const errors = validationResult(req);
+      // if (!errors.isEmpty()) {
+      //   return next(ApiError.BadRequest('Validation error', errors.array()));
+      // }
       const data = req.body;
       const customerData = await customerService.registration(data);
       res.cookie('refreshToken', customerData.refreshToken, {
@@ -104,7 +104,7 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async createOrderReceiver(req, res, next) {
     try {
       const data = req.body;
@@ -116,7 +116,7 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async updateOrderReceiver(req, res, next) {
     try {
       const id = req.user.id;
@@ -127,7 +127,7 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async deleteOrderReceiver(req, res, next) {
     try {
       const id = req.params.id;
@@ -137,7 +137,7 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async getOrderReceivers(req, res, next) {
     try {
       const customerid = req.user.id;
@@ -149,7 +149,7 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async getPrimaryOrderReceiver(req, res, next) {
     try {
       const id = req.user.id;
@@ -168,14 +168,14 @@ class CustomerController {
         return next(ApiError.BadRequest('Validation error', errors.array()));
       }
       const data = req.body;
-      data.customerID = req.user.id;;
+      data.customerID = req.user.id;
       const Data = await customerService.createDeliveryAddress(data);
       return res.status(201).json(Data);
     } catch (e) {
       next(e);
     }
   }
-  
+
   async updateDeliveryAddress(req, res, next) {
     try {
       const errors = validationResult(req);
@@ -190,18 +190,21 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async deleteDeliveryAddress(req, res, next) {
     try {
       const delAdrID = req.params.id;
       const customerID = req.user.id;
-      const deletedDeliveryAddress = await customerService.deleteDeliveryAddress(customerID, delAdrID);
-      return res.status(200).json("Delivery address had beed successfully deleted");
+      const deletedDeliveryAddress =
+        await customerService.deleteDeliveryAddress(customerID, delAdrID);
+      return res
+        .status(200)
+        .json('Delivery address had beed successfully deleted');
     } catch (e) {
       next(e);
     }
   }
-  
+
   async getDeliveryAddress(req, res, next) {
     try {
       const id = req.user.id;
@@ -211,11 +214,12 @@ class CustomerController {
       next(e);
     }
   }
-  
+
   async getPrimaryDeliveryAddress(req, res, next) {
     try {
       const id = req.user.id;
-      const GetPrimaryDeliveryAddress = await customerService.getPrimaryDeliveryAddress(id);
+      const GetPrimaryDeliveryAddress =
+        await customerService.getPrimaryDeliveryAddress(id);
       return res.status(200).json(GetPrimaryDeliveryAddress);
     } catch (e) {
       next(e);

@@ -99,5 +99,16 @@ describe('customer', () => {
         expect(body.errors.email.message).toBe('Path `email` is required.');
       });
     });
+
+    describe('given the fact that customer with such login already exists', () => {
+      it('should return a 409 status and json with message', async () => {
+        // await createCustomer(customerData.customerCorrect);
+        // const { body, statusCode } = await request
+        //   .post(`/api/customer/registration`)
+        //   .send(customerData.customerCorrect);
+        // expect(statusCode).toBe(409);
+        // expect(body.errors.login.properties.type).toBe('unique');
+      });
+    });
   });
 });

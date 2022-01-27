@@ -5,10 +5,6 @@ const ApiError = require('../exceptions/api-error');
 class CustomerController {
   async registration(req, res, next) {
     try {
-      // const errors = validationResult(req);
-      // if (!errors.isEmpty()) {
-      //   return next(ApiError.BadRequest('Validation error', errors.array()));
-      // }
       const data = req.body;
       const customerData = await customerService.registration(data);
       res.cookie('refreshToken', customerData.refreshToken, {

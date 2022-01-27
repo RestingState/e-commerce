@@ -2,7 +2,7 @@ const createServer = require('../utils/server');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const createCustomer = require('../utils/customer');
-const customerData = require('./data/customer');
+const customerData = require('../testsData/customer');
 
 const app = createServer();
 const request = require('supertest')(app);
@@ -39,7 +39,7 @@ describe('customer', () => {
           .send(customerData.customerLoginAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.message).toBe('Validation error');
+        expect(body.errors.login.message).toBe('Path `login` is required.');
       });
     });
 
@@ -50,7 +50,9 @@ describe('customer', () => {
           .send(customerData.customerPasswordAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.message).toBe('Validation error');
+        expect(body.errors.password.message).toBe(
+          'Path `password` is required.'
+        );
       });
     });
 
@@ -61,7 +63,7 @@ describe('customer', () => {
           .send(customerData.customerNameAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.message).toBe('Validation error');
+        expect(body.errors.name.message).toBe('Path `name` is required.');
       });
     });
 
@@ -72,7 +74,7 @@ describe('customer', () => {
           .send(customerData.customerSurnameAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.message).toBe('Validation error');
+        expect(body.errors.surname.message).toBe('Path `surname` is required.');
       });
     });
 
@@ -83,7 +85,7 @@ describe('customer', () => {
           .send(customerData.customerPhoneAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.message).toBe('Validation error');
+        expect(body.errors.phone.message).toBe('Path `phone` is required.');
       });
     });
 
@@ -94,7 +96,7 @@ describe('customer', () => {
           .send(customerData.customerEmailAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.message).toBe('Validation error');
+        expect(body.errors.email.message).toBe('Path `email` is required.');
       });
     });
   });

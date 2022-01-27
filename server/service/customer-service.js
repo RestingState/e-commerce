@@ -13,9 +13,13 @@ const mongoose = require('mongoose');
 
 class CustomerService {
   async registration(data) {
-    if (!data.password) {
-      throw ApiError.BadRequest('no password was provided');
+    // Check if all required data for creating model was provided
+    const potentialCustomer = new CustomerModel(data);
+    const err = potentialCustomer.validateSync();
+    if (err) {
+      throw ApiError.BadRequest(err.message, err.errors);
     }
+
     const hashPassword = await bcrypt.hash(data.password, 3);
     const activationLink = uuid.v4();
     data.password = hashPassword;

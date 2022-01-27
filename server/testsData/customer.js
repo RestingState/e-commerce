@@ -1,5 +1,3 @@
-it('customer data', () => {});
-
 const customerCorrect = {
   login: 'strawberry',
   password: 'qwerty123',

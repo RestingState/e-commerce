@@ -20,14 +20,14 @@ const clearCustomerCollection = async () => {
 };
 
 const initializeCustomerCollectionWithOneCustomer = async () => {
-  await createCustomer(CustomerData.correct1);
+  await createCustomer(CustomerData.registrationCorrect1);
 };
 
 const initializeCustomerCollectionWithManyCustomers = async () => {
   await createCustomers([
-    CustomerData.correct1,
-    CustomerData.correct2,
-    CustomerData.correct3
+    CustomerData.registrationCorrect1,
+    CustomerData.registrationCorrect2,
+    CustomerData.registrationCorrect3
   ]);
 };
 

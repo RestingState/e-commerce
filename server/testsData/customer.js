@@ -1,4 +1,4 @@
-const correct1 = {
+const registrationCorrect1 = {
   login: 'strawberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -7,7 +7,7 @@ const correct1 = {
   email: 'lavandos@gmail.com'
 };
 
-const correct2 = {
+const registrationCorrect2 = {
   login: 'blueberry',
   password: 'asdfgh123',
   name: 'Denys',
@@ -16,7 +16,7 @@ const correct2 = {
   email: 'zachar@gmail.com'
 };
 
-const correct3 = {
+const registrationCorrect3 = {
   login: 'apple',
   password: 'zxcvb321',
   name: 'Augusto',
@@ -25,7 +25,7 @@ const correct3 = {
   email: 'augusto@gmail.com'
 };
 
-const loginAbsence = {
+const registrationLoginAbsence = {
   password: 'qwerty123',
   name: 'Vladik',
   surname: 'Lavandos',
@@ -33,7 +33,7 @@ const loginAbsence = {
   email: 'lavandos@gmail.com'
 };
 
-const passwordAbsence = {
+const registrationPasswordAbsence = {
   login: 'strawberry',
   name: 'Vladik',
   surname: 'Lavandos',
@@ -41,7 +41,7 @@ const passwordAbsence = {
   email: 'lavandos@gmail.com'
 };
 
-const nameAbsence = {
+const registrationNameAbsence = {
   login: 'strawberry',
   password: 'qwerty123',
   surname: 'Lavandos',
@@ -49,7 +49,7 @@ const nameAbsence = {
   email: 'lavandos@gmail.com'
 };
 
-const surnameAbsence = {
+const registrationSurnameAbsence = {
   login: 'strawberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -57,7 +57,7 @@ const surnameAbsence = {
   email: 'lavandos@gmail.com'
 };
 
-const phoneAbsence = {
+const registrationPhoneAbsence = {
   login: 'strawberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -65,7 +65,7 @@ const phoneAbsence = {
   email: 'lavandos@gmail.com'
 };
 
-const emailAbsence = {
+const registrationEmailAbsence = {
   login: 'strawberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -73,7 +73,7 @@ const emailAbsence = {
   phone: '+380992997523'
 };
 
-const customerWithSuchLoginExists = {
+const registrationCustomerWithSuchLoginExists = {
   login: 'strawberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -82,7 +82,7 @@ const customerWithSuchLoginExists = {
   email: 'august@gmail.com'
 };
 
-const customerWithSuchPhoneExists = {
+const registrationCustomerWithSuchPhoneExists = {
   login: 'blueberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -91,7 +91,7 @@ const customerWithSuchPhoneExists = {
   email: 'august@gmail.com'
 };
 
-const customerWithSuchEmailExists = {
+const registrationCustomerWithSuchEmailExists = {
   login: 'blueberry',
   password: 'qwerty123',
   name: 'Vladik',
@@ -105,18 +105,28 @@ const loginCorrect = {
   password: 'qwerty123'
 };
 
+const loginLoginFieldAbsence = {
+  password: 'qwerty123'
+};
+
+const loginPasswordFieldAbsence = {
+  login: 'strawberry'
+};
+
 module.exports = {
-  correct1,
-  correct2,
-  correct3,
-  loginAbsence,
-  passwordAbsence,
-  nameAbsence,
-  surnameAbsence,
-  phoneAbsence,
-  emailAbsence,
-  customerWithSuchLoginExists,
-  customerWithSuchPhoneExists,
-  customerWithSuchEmailExists,
-  loginCorrect
+  registrationCorrect1,
+  registrationCorrect2,
+  registrationCorrect3,
+  registrationLoginAbsence,
+  registrationPasswordAbsence,
+  registrationNameAbsence,
+  registrationSurnameAbsence,
+  registrationPhoneAbsence,
+  registrationEmailAbsence,
+  registrationCustomerWithSuchLoginExists,
+  registrationCustomerWithSuchPhoneExists,
+  registrationCustomerWithSuchEmailExists,
+  loginCorrect,
+  loginLoginFieldAbsence,
+  loginPasswordFieldAbsence
 };

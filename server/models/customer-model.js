@@ -11,11 +11,6 @@ const CustomerSchema = new Schema({
     type: String,
     required: true
   },
-  // role: {
-  //   type: String,
-  //   required: true,
-  //   enum: ['customer', 'seller', 'admin'],
-  // },
   name: {
     type: String,
     required: true

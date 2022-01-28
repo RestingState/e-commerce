@@ -32,7 +32,7 @@ describe('customer', () => {
         it('should return a 201 status and json with tokens and customerDto', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.correct1);
+            .send(CustomerData.registrationCorrect1);
 
           expect(statusCode).toBe(201);
           expect(body.accessToken).toBeDefined();
@@ -45,7 +45,7 @@ describe('customer', () => {
         it('should return a 400 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.loginAbsence);
+            .send(CustomerData.registrationLoginAbsence);
 
           expect(statusCode).toBe(400);
           expect(body.errors.login.message).toBe('Path `login` is required.');
@@ -56,7 +56,7 @@ describe('customer', () => {
         it('should return a 400 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.passwordAbsence);
+            .send(CustomerData.registrationPasswordAbsence);
 
           expect(statusCode).toBe(400);
           expect(body.errors.password.message).toBe(
@@ -69,7 +69,7 @@ describe('customer', () => {
         it('should return a 400 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.nameAbsence);
+            .send(CustomerData.registrationNameAbsence);
 
           expect(statusCode).toBe(400);
           expect(body.errors.name.message).toBe('Path `name` is required.');
@@ -80,7 +80,7 @@ describe('customer', () => {
         it('should return a 400 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.surnameAbsence);
+            .send(CustomerData.registrationSurnameAbsence);
 
           expect(statusCode).toBe(400);
           expect(body.errors.surname.message).toBe(
@@ -93,7 +93,7 @@ describe('customer', () => {
         it('should return a 400 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.phoneAbsence);
+            .send(CustomerData.registrationPhoneAbsence);
 
           expect(statusCode).toBe(400);
           expect(body.errors.phone.message).toBe('Path `phone` is required.');
@@ -104,7 +104,7 @@ describe('customer', () => {
         it('should return a 400 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.emailAbsence);
+            .send(CustomerData.registrationEmailAbsence);
 
           expect(statusCode).toBe(400);
           expect(body.errors.email.message).toBe('Path `email` is required.');
@@ -121,7 +121,7 @@ describe('customer', () => {
         it('should return a 409 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.customerWithSuchLoginExists);
+            .send(CustomerData.registrationCustomerWithSuchLoginExists);
           expect(statusCode).toBe(409);
           expect(body.errors.login.properties.type).toBe('unique');
         });
@@ -131,7 +131,7 @@ describe('customer', () => {
         it('should return a 409 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.customerWithSuchPhoneExists);
+            .send(CustomerData.registrationCustomerWithSuchPhoneExists);
           expect(statusCode).toBe(409);
           expect(body.errors.phone.properties.type).toBe('unique');
         });
@@ -141,7 +141,7 @@ describe('customer', () => {
         it('should return a 409 status and json with message', async () => {
           const { body, statusCode } = await request
             .post(`/api/customer/registration`)
-            .send(CustomerData.customerWithSuchEmailExists);
+            .send(CustomerData.registrationCustomerWithSuchEmailExists);
           expect(statusCode).toBe(409);
           expect(body.errors.email.properties.type).toBe('unique');
         });
@@ -163,6 +163,17 @@ describe('customer', () => {
         expect(statusCode).toBe(200);
         expect(body.accessToken).toBeDefined();
         expect(body.refreshToken).toBeDefined();
+      });
+    });
+
+    describe('given the absence of login', () => {
+      it('should return a 400 status and message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/login`)
+          .send(CustomerData.loginLoginFieldAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.errors.login.message).toBe('Path `login` is required.');
       });
     });
   });

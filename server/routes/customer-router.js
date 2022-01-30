@@ -3,9 +3,15 @@ const router = new Router();
 const customerController = require('../controllers/customer-controller');
 const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
+const validateDto = require('../middlewares/validate-dto');
+const { registerValidation, loginValidation } = require('../schemas/customer');
 
-router.post('/registration', customerController.registration);
-router.post('/login', customerController.login);
+router.post(
+  '/registration',
+  validateDto(registerValidation),
+  customerController.registration
+);
+router.post('/login', validateDto(loginValidation), customerController.login);
 router.post('/logout', customerController.logout);
 router.get('/activate/:link', customerController.activate);
 router.get('/refresh', customerController.refresh);

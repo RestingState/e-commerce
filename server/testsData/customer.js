@@ -100,9 +100,14 @@ const registrationCustomerWithSuchEmailExists = {
   email: 'lavandos@gmail.com'
 };
 
-const loginCorrect = {
+const loginCorrect1 = {
   login: 'strawberry',
   password: 'qwerty123'
+};
+
+const loginCorrect2 = {
+  login: 'blueberry',
+  password: 'asdfgh123'
 };
 
 const loginLoginFieldAbsence = {
@@ -112,6 +117,19 @@ const loginLoginFieldAbsence = {
 const loginPasswordFieldAbsence = {
   login: 'strawberry'
 };
+
+const loginLoginIsIncorrect = {
+  login: 'whatever',
+  password: 'qwerty123'
+};
+
+const loginPasswordIsIncorrect = {
+  login: 'strawberry',
+  password: 'incorrect'
+};
+
+const incorrectToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 
 module.exports = {
   registrationCorrect1,
@@ -126,7 +144,11 @@ module.exports = {
   registrationCustomerWithSuchLoginExists,
   registrationCustomerWithSuchPhoneExists,
   registrationCustomerWithSuchEmailExists,
-  loginCorrect,
+  loginCorrect1,
+  loginCorrect2,
   loginLoginFieldAbsence,
-  loginPasswordFieldAbsence
+  loginPasswordFieldAbsence,
+  loginLoginIsIncorrect,
+  loginPasswordIsIncorrect,
+  incorrectToken
 };

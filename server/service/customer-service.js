@@ -64,8 +64,7 @@ class CustomerService {
   }
 
   async logout(refreshToken) {
-    const token = await tokenService.removeToken(refreshToken);
-    return token;
+    await tokenService.removeToken(refreshToken);
   }
 
   async refresh(refreshToken) {
@@ -86,8 +85,14 @@ class CustomerService {
   }
 
   async deleteCustomer(id, refreshToken) {
-    const customer = await CustomerModel.deleteOne({ _id: id });
-    const token = await tokenService.removeToken(refreshToken);
+    const responseFromDeleteCustomer = await CustomerModel.deleteOne({
+      _id: id
+    });
+    if (responseFromDeleteCustomer.deletedCount == 0) {
+      return null;
+    }
+    await tokenService.removeToken(refreshToken);
+    return responseFromDeleteCustomer;
   }
 
   async getCustomerPersonalInfo(id) {

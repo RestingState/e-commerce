@@ -4,8 +4,14 @@ const mongoose = require('mongoose');
 const {
   clearCustomerCollection,
   initializeCustomerCollectionWithOneCustomer,
-  initializeCustomerCollectionWithManyCustomers
+  initializeCustomerCollectionWithManyCustomers,
+  getActivationLink,
+  createCustomerWithActivationLink
 } = require('../utils/customer');
+const {
+  getValidCustomerAccessToken,
+  getExpiredCustomerAccessToken
+} = require('../utils/token');
 const CustomerData = require('../testsData/customer');
 
 const app = createServer();
@@ -178,52 +184,240 @@ describe('customer', () => {
   });
 
   describe('POST /customer/login', () => {
-    beforeAll(async () => {
-      await initializeCustomerCollectionWithManyCustomers();
-    });
+    describe("given the fact that customer's collection has one customer", () => {
+      beforeAll(async () => {
+        await initializeCustomerCollectionWithOneCustomer();
+      });
 
-    describe('given the input data is correct', () => {
-      it('should return a 201 status and json with tokens', async () => {
-        const { body, statusCode } = await request
-          .post(`/api/customer/login`)
-          .send(CustomerData.loginCorrect);
+      afterAll(async () => {
+        await clearCustomerCollection();
+      });
 
-        expect(statusCode).toBe(200);
-        expect(body.accessToken).toBeDefined();
-        expect(body.refreshToken).toBeDefined();
+      describe('given the input data is correct', () => {
+        it('should return a 200 status and json with tokens', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/login`)
+            .send(CustomerData.loginCorrect1);
+
+          expect(statusCode).toBe(200);
+          expect(body.accessToken).toBeDefined();
+          expect(body.refreshToken).toBeDefined();
+        });
+      });
+
+      describe('given the absence of login', () => {
+        it('should return a 400 status and message', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/login`)
+            .send(CustomerData.loginLoginFieldAbsence);
+
+          expect(statusCode).toBe(400);
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) => error.message === "must have required property 'login'"
+            )
+          ).toBe(true);
+        });
+      });
+
+      describe('given the absence of password', () => {
+        it('should return a 400 status and message', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/login`)
+            .send(CustomerData.loginPasswordFieldAbsence);
+
+          expect(statusCode).toBe(400);
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) =>
+                error.message === "must have required property 'password'"
+            )
+          ).toBe(true);
+        });
+      });
+
+      describe('given the incorrect login', () => {
+        it('should return a 400 status and message', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/login`)
+            .send(CustomerData.loginLoginIsIncorrect);
+
+          expect(statusCode).toBe(400);
+          expect(body.message).toBe('incorrect login');
+        });
+      });
+
+      describe('given the incorrect password', () => {
+        it('should return a 400 status and message', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/login`)
+            .send(CustomerData.loginPasswordIsIncorrect);
+
+          expect(statusCode).toBe(400);
+          expect(body.message).toBe('incorrect password');
+        });
       });
     });
+  });
 
-    describe('given the absence of login', () => {
-      it('should return a 400 status and message', async () => {
-        const { body, statusCode } = await request
-          .post(`/api/customer/login`)
-          .send(CustomerData.loginLoginFieldAbsence);
+  describe('POST /customer/logout', () => {
+    describe("given the fact that customer's collection has one customer", () => {
+      let accessToken;
+      beforeAll(async () => {
+        await initializeCustomerCollectionWithOneCustomer();
+        accessToken = getValidCustomerAccessToken(
+          CustomerData.loginCorrect1,
+          '15m'
+        );
+      });
 
-        expect(statusCode).toBe(400);
-        expect(body.message).toBe('invalid input');
-        expect(
-          body.errors.some(
-            (error) => error.message === "must have required property 'login'"
-          )
-        ).toBe(true);
+      afterAll(async () => {
+        await clearCustomerCollection();
+      });
+
+      describe('given the token is correct', () => {
+        it('should return a 200 status and message', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/logout`)
+            .set('Authorization', `Bearer ${accessToken}`);
+
+          expect(statusCode).toBe(200);
+          expect(body.message).toBe('customer logged out');
+        });
+      });
+
+      describe('given the token was not provided', () => {
+        it('should return a 401 status and message', async () => {
+          const { body, statusCode } = await request.post(
+            `/api/customer/logout`
+          );
+
+          expect(statusCode).toBe(401);
+          expect(body.message).toBe('user is not authorized');
+        });
+      });
+
+      describe('given the token is incorrect', () => {
+        it('should return a 401 status and message', async () => {
+          const { body, statusCode } = await request
+            .post(`/api/customer/logout`)
+            .set('Authorization', `Bearer ${CustomerData.incorrectToken}`);
+
+          expect(statusCode).toBe(401);
+          expect(body.message).toBe('user is not authorized');
+        });
+      });
+
+      describe('given the token has expired', () => {
+        it('should return a 401 status and message', async () => {
+          const expiredToken = getExpiredCustomerAccessToken(
+            CustomerData.loginCorrect1
+          );
+
+          const { body, statusCode } = await request
+            .post(`/api/customer/logout`)
+            .set('Authorization', `Bearer ${expiredToken}`);
+
+          expect(statusCode).toBe(401);
+          expect(body.message).toBe('user is not authorized');
+        });
       });
     });
+  });
 
-    describe('given the absence of password', () => {
-      it('should return a 400 status and message', async () => {
-        const { body, statusCode } = await request
-          .post(`/api/customer/login`)
-          .send(CustomerData.loginPasswordFieldAbsence);
+  describe('DELETE /customer', () => {
+    describe("given the fact that customer's collection has many customer", () => {
+      beforeEach(async () => {
+        await initializeCustomerCollectionWithManyCustomers();
+      });
 
-        expect(statusCode).toBe(400);
-        expect(body.message).toBe('invalid input');
-        expect(
-          body.errors.some(
-            (error) =>
-              error.message === "must have required property 'password'"
-          )
-        ).toBe(true);
+      afterEach(async () => {
+        await clearCustomerCollection();
+      });
+
+      describe('given the fact that customer exists', () => {
+        it('should return a 200 status and message', async () => {
+          const accessToken = await getValidCustomerAccessToken(
+            CustomerData.loginCorrect1,
+            '15m'
+          );
+
+          const { body, statusCode } = await request
+            .delete(`/api/customer`)
+            .set('Authorization', `Bearer ${accessToken}`);
+
+          expect(statusCode).toBe(200);
+          expect(body.message).toBe('customer deleted');
+        });
+      });
+
+      describe('given the fact that customer exists, but request was not authorized', () => {
+        it('should return a 401 status and message', async () => {
+          const { body, statusCode } = await request.delete(`/api/customer`);
+
+          expect(statusCode).toBe(401);
+          expect(body.message).toBe('user is not authorized');
+        });
+      });
+
+      describe('given the fact that customer does not exists', () => {
+        it('should return a 404 status and message', async () => {
+          const accessToken = await getValidCustomerAccessToken(
+            CustomerData.loginCorrect1,
+            '15m'
+          );
+          await clearCustomerCollection();
+
+          const { body, statusCode } = await request
+            .delete(`/api/customer`)
+            .set('Authorization', `Bearer ${accessToken}`);
+
+          expect(statusCode).toBe(404);
+          expect(body.message).toBe('customer was not found');
+        });
+      });
+    });
+  });
+
+  describe('GET /activate/:link', () => {
+    describe("given the fact that customer's collection has no customers", () => {
+      afterEach(async () => {
+        await clearCustomerCollection();
+      });
+
+      describe('given the activationLink is correct and customer exists', () => {
+        it('should return a 302 status and message', async () => {
+          const activationLink = getActivationLink();
+          await createCustomerWithActivationLink(
+            CustomerData.registrationCorrect1,
+            activationLink
+          );
+
+          const { body, statusCode } = await request.get(
+            `/api/customer/activate/${activationLink}`
+          );
+
+          expect(statusCode).toBe(302);
+        });
+      });
+
+      describe('given the customer with such activationLink does not exist', () => {
+        it('should return a 200 status and message', async () => {
+          const activationLink = getActivationLink();
+          await createCustomerWithActivationLink(
+            CustomerData.registrationCorrect1,
+            activationLink
+          );
+          const activationLinkOfNonExistingCustomer = getActivationLink();
+
+          const { body, statusCode } = await request.get(
+            `/api/customer/activate/${activationLinkOfNonExistingCustomer}`
+          );
+
+          expect(statusCode).toBe(400);
+        });
       });
     });
   });

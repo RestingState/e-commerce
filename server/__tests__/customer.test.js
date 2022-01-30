@@ -48,7 +48,12 @@ describe('customer', () => {
             .send(CustomerData.registrationLoginAbsence);
 
           expect(statusCode).toBe(400);
-          expect(body.errors.login.message).toBe('Path `login` is required.');
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) => error.message === "must have required property 'login'"
+            )
+          ).toBe(true);
         });
       });
 
@@ -59,9 +64,13 @@ describe('customer', () => {
             .send(CustomerData.registrationPasswordAbsence);
 
           expect(statusCode).toBe(400);
-          expect(body.errors.password.message).toBe(
-            'Path `password` is required.'
-          );
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) =>
+                error.message === "must have required property 'password'"
+            )
+          ).toBe(true);
         });
       });
 
@@ -72,7 +81,12 @@ describe('customer', () => {
             .send(CustomerData.registrationNameAbsence);
 
           expect(statusCode).toBe(400);
-          expect(body.errors.name.message).toBe('Path `name` is required.');
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) => error.message === "must have required property 'name'"
+            )
+          ).toBe(true);
         });
       });
 
@@ -83,9 +97,13 @@ describe('customer', () => {
             .send(CustomerData.registrationSurnameAbsence);
 
           expect(statusCode).toBe(400);
-          expect(body.errors.surname.message).toBe(
-            'Path `surname` is required.'
-          );
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) =>
+                error.message === "must have required property 'surname'"
+            )
+          ).toBe(true);
         });
       });
 
@@ -96,7 +114,12 @@ describe('customer', () => {
             .send(CustomerData.registrationPhoneAbsence);
 
           expect(statusCode).toBe(400);
-          expect(body.errors.phone.message).toBe('Path `phone` is required.');
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) => error.message === "must have required property 'phone'"
+            )
+          ).toBe(true);
         });
       });
 
@@ -107,7 +130,12 @@ describe('customer', () => {
             .send(CustomerData.registrationEmailAbsence);
 
           expect(statusCode).toBe(400);
-          expect(body.errors.email.message).toBe('Path `email` is required.');
+          expect(body.message).toBe('invalid input');
+          expect(
+            body.errors.some(
+              (error) => error.message === "must have required property 'email'"
+            )
+          ).toBe(true);
         });
       });
     });
@@ -173,7 +201,29 @@ describe('customer', () => {
           .send(CustomerData.loginLoginFieldAbsence);
 
         expect(statusCode).toBe(400);
-        expect(body.errors.login.message).toBe('Path `login` is required.');
+        expect(body.message).toBe('invalid input');
+        expect(
+          body.errors.some(
+            (error) => error.message === "must have required property 'login'"
+          )
+        ).toBe(true);
+      });
+    });
+
+    describe('given the absence of password', () => {
+      it('should return a 400 status and message', async () => {
+        const { body, statusCode } = await request
+          .post(`/api/customer/login`)
+          .send(CustomerData.loginPasswordFieldAbsence);
+
+        expect(statusCode).toBe(400);
+        expect(body.message).toBe('invalid input');
+        expect(
+          body.errors.some(
+            (error) =>
+              error.message === "must have required property 'password'"
+          )
+        ).toBe(true);
       });
     });
   });

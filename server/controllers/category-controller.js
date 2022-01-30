@@ -7,8 +7,17 @@ class CategoryController {
   async getCategory(req, res, next) {
     try {
       const id = req.params.id;
-      const GetCategory = await productService.getCategory(id);
+      const GetCategory = await categoryService.getCategory(id);
       return res.status(200).json(GetCategory);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async getCategories(req, res, next) {
+    try {
+      const array = req.query.array.split(',');
+      const GetCategories = await categoryService.getCategories(array);
+      return res.status(200).json(GetCategories);
     } catch (e) {
       next(e);
     }

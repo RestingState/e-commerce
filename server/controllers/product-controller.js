@@ -13,6 +13,16 @@ class ProductController {
       next(e);
     }
   }
+  async getProductByCategories(req, res, next) {
+    try {
+      const array = req.query.array.split(',');
+      const GetProductByCategories =
+        await productService.getProductByCategories(array);
+      return res.status(200).json(GetProductByCategories);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new ProductController();

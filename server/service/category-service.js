@@ -5,5 +5,9 @@ class CategoryService {
     const category = await CategoryModel.findById(id);
     return category;
   }
+  async getCategories(array) {
+    const category = await CategoryModel.find({ _id: { $in: array } }, '-_id');
+    return category;
+  }
 }
 module.exports = new CategoryService();

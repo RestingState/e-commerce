@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const BasketSchema = new Schema({
   productID: {
     type: Schema.Types.ObjectId,
-    ref: 'OrderReceiver',
+    ref: 'Product',
   },
   customerID: {
     type: Schema.Types.ObjectId,

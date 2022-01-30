@@ -16,7 +16,10 @@ class BasketService {
     }
   }
   async getProductsFromBasket(customerID) {
-    const productInBasket = await BasketModel.find({ customerID }, '-__v');
+    const productInBasket = await BasketModel.find(
+      { customerID },
+      '-__v'
+    ).populate('customerID productID', 'name -_id');
     return productInBasket;
   }
 }

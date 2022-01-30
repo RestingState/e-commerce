@@ -8,7 +8,7 @@ const ProductSchema = new Schema({
   categories: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'category',
+      ref: 'Category',
     },
   ],
   parameters: [{}],
@@ -16,13 +16,13 @@ const ProductSchema = new Schema({
   deliveryTypes: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'delivery',
+      ref: 'DeliveryType',
     },
   ],
   paymentTypes: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'payment',
+      ref: 'PaymentType',
     },
   ],
   guarantee: String,

@@ -7,7 +7,7 @@ class PaymentTypeController {
   async getPaymentType(req, res, next) {
     try {
       const id = req.params.id;
-      const GetPaymentType = await productService.getPaymentType(id);
+      const GetPaymentType = await paymentTypeService.getPaymentType(id);
       return res.status(200).json(GetPaymentType);
     } catch (e) {
       next(e);

@@ -54,7 +54,7 @@ router.post(
   basketController.addToBasket
 );
 router.delete(
-  '/basket/deleteProduct/:id',
+  '/basket/Product/:id',
   authMiddleware,
   basketController.deleteFromBasket
 );

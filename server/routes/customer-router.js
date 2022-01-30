@@ -12,7 +12,7 @@ router.post(
   customerController.registration
 );
 router.post('/login', validateDto(loginValidation), customerController.login);
-router.post('/logout', customerController.logout);
+router.post('/logout', authMiddleware, customerController.logout);
 router.get('/activate/:link', customerController.activate);
 router.get('/refresh', customerController.refresh);
 router.delete('', authMiddleware, customerController.deleteCustomer);

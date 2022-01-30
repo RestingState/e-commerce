@@ -1,6 +1,7 @@
 const CustomerModel = require('../models/customer-model');
 const CustomerData = require('../testsData/customer');
 const bcrypt = require('bcrypt');
+const uuid = require('uuid');
 
 const createCustomer = async (data) => {
   const customer = Object.assign({}, data);
@@ -31,8 +32,20 @@ const initializeCustomerCollectionWithManyCustomers = async () => {
   ]);
 };
 
+const getActivationLink = () => {
+  const activationLink = uuid.v4();
+  return activationLink;
+};
+
+const createCustomerWithActivationLink = async (payload, activationLink) => {
+  payload.activationLink = activationLink;
+  await createCustomer(payload);
+};
+
 module.exports = {
   clearCustomerCollection,
   initializeCustomerCollectionWithOneCustomer,
-  initializeCustomerCollectionWithManyCustomers
+  initializeCustomerCollectionWithManyCustomers,
+  getActivationLink,
+  createCustomerWithActivationLink
 };

@@ -34,9 +34,9 @@ class CustomerController {
   async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-      const token = await customerService.logout(refreshToken);
+      await customerService.logout(refreshToken);
       res.clearCookie('refreshToken');
-      return res.json(token);
+      res.json({ message: 'customer logged out' });
     } catch (e) {
       next(e);
     }
@@ -70,11 +70,11 @@ class CustomerController {
     try {
       const id = req.user.id;
       const { refreshToken } = req.cookies;
-      const deleteCustomer = await customerService.deleteCustomer(
-        id,
-        refreshToken
-      );
-      return res.status(200).json(deleteCustomer);
+      const response = await customerService.deleteCustomer(id, refreshToken);
+      if (!response) {
+        return next(ApiError.NotFound('customer was not found'));
+      }
+      return res.status(200).json({ message: 'customer deleted' });
     } catch (e) {
       next(e);
     }

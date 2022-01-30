@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/RestingState/e-commerce#readme",
   "dependencies": {
+    "ajv": "^8.9.0",
+    "ajv-formats": "^2.1.1",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

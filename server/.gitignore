@@ -3,3 +3,6 @@ node_modules
 // Personal files for development
 ToDo.txt
 Questions.txt
+
+// env
+.env
